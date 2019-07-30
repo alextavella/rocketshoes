@@ -9,8 +9,13 @@ import {
 
 import { Container, ProductTable, Total } from './styles';
 
-function Cart(props) {
-  const { cart } = props;
+function Cart({ cart, dispatch }) {
+  const handleDeleteProduct = product => {
+    dispatch({
+      type: 'REMOVE_FROM_CART',
+      id: product.id,
+    });
+  };
 
   return (
     <Container>
@@ -49,7 +54,10 @@ function Cart(props) {
                 <strong>R$258,80</strong>
               </td>
               <td>
-                <button type="button">
+                <button
+                  type="button"
+                  onClick={() => handleDeleteProduct(product)}
+                >
                   <MdDelete size={20} color="#7159c1" />
                 </button>
               </td>
@@ -78,6 +86,7 @@ Cart.propTypes = {
       price: PropTypes.string,
     })
   ),
+  dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
