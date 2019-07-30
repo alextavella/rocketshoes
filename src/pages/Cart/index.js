@@ -8,7 +8,6 @@ import {
   MdDelete,
 } from 'react-icons/md';
 
-import { format } from 'path';
 import * as CartActions from '../../store/modules/cart/actions';
 import { formatPrice } from '../../utils/format';
 

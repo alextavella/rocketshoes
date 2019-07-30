@@ -11,7 +11,7 @@ import * as CartActions from '../../store/modules/cart/actions';
 
 import { ProductList } from './styles';
 
-function Home({ addToCart, amount }) {
+function Home({ addToCartRequest, amount }) {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ function Home({ addToCart, amount }) {
   }, []);
 
   const handleAddProduct = product => {
-    addToCart(product);
+    addToCartRequest(product.id);
   };
 
   return (
@@ -53,7 +53,7 @@ function Home({ addToCart, amount }) {
 }
 
 Home.propTypes = {
-  addToCart: PropTypes.func.isRequired,
+  addToCartRequest: PropTypes.func.isRequired,
   amount: PropTypes.arrayOf(PropTypes.number),
 };
 
