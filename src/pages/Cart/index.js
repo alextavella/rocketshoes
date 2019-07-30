@@ -100,6 +100,7 @@ Cart.propTypes = {
       title: PropTypes.string,
       image: PropTypes.string,
       price: PropTypes.string,
+      amount: PropTypes.number,
     })
   ),
   total: PropTypes.number.isRequired,
