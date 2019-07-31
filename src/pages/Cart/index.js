@@ -46,7 +46,7 @@ function Cart({ cart, total, removeFromCart, updateAmount }) {
               </td>
               <td>
                 <strong>{product.title}</strong>
-                <span>{product.price}</span>
+                <span>{product.priceFormatted}</span>
               </td>
               <td>
                 <div>
@@ -99,6 +99,7 @@ Cart.propTypes = {
       title: PropTypes.string,
       image: PropTypes.string,
       price: PropTypes.string,
+      priceFormatted: PropTypes.string,
       amount: PropTypes.number,
     })
   ),
@@ -110,6 +111,7 @@ Cart.propTypes = {
 const mapStateToProps = state => ({
   cart: state.cart.map(product => ({
     ...product,
+    priceFormatted: formatPrice(product.price),
     subtotal: formatPrice(product.price * product.amount),
   })),
 
