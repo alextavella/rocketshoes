@@ -1,6 +1,8 @@
 import produce from 'immer';
 
-export default function cart(state = { loading: false, items: [] }, action) {
+import initialState from './initialState';
+
+export default function cart(state = initialState, action) {
   switch (action.type) {
     case '@cart/ADD_REQUEST':
     case '@cart/UPDATE_AMOUNT_REQUEST':

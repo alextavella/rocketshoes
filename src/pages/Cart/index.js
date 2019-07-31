@@ -65,7 +65,12 @@ function Cart({ cart, total, removeFromCart, updateAmountRequest }) {
                   >
                     <MdRemoveCircleOutline size={20} color="#7159c1" />
                   </button>
-                  <input type="number" readOnly value={product.amount} />
+                  <input
+                    type="text"
+                    readOnly
+                    value={product.amount}
+                    width="40"
+                  />
                   <button
                     type="button"
                     onClick={() => incrementProduct(product)}
@@ -78,12 +83,9 @@ function Cart({ cart, total, removeFromCart, updateAmountRequest }) {
                 <strong>{product.subtotal}</strong>
               </td>
               <td>
-                <button
-                  type="button"
-                  onClick={() => handleDeleteProduct(product.id)}
-                >
+                <Button onClick={() => handleDeleteProduct(product.id)}>
                   <MdDelete size={20} color="#7159c1" />
-                </button>
+                </Button>
               </td>
             </tr>
           ))}
