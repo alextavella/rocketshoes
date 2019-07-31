@@ -15,10 +15,10 @@ export default createGlobalStyle`
 
   body {
     background: #191920 url(${background}) no-repeat center top;
-    -webkot-font-smoothing: antialiased;
+    -webkit-font-smoothing: antialiased;
   }
 
-  body, inpit, button {
+  body, input, button {
     font: 14px Roboto, sans-serif;
   }
 
@@ -26,6 +26,11 @@ export default createGlobalStyle`
     max-width: 1020px;
     margin: 0 auto;
     padding: 0 20px 50px;
+  }
+
+  html, body, div#root {
+    height: 97%;
+    min-height: 500px;
   }
 
   button {

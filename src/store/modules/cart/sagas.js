@@ -5,11 +5,15 @@ import api from '../../../services/api';
 import history from '../../../services/history';
 import { formatPrice } from '../../../utils/format';
 
-import { addToCartSuccess, updateAmountSuccess } from './actions';
+import {
+  addToCartError,
+  addToCartSuccess,
+  updateAmountSuccess,
+} from './actions';
 
 function* addToCart({ id }) {
   const productExists = yield select(state =>
-    state.cart.find(item => item.id === id)
+    state.cart.items.find(item => item.id === id)
   );
 
   const stock = yield call(api.get, `/stock/${id}`);
@@ -20,6 +24,7 @@ function* addToCart({ id }) {
 
   if (amount > stockAmount) {
     toast.error('Product amount out of stock');
+    yield put(addToCartError());
     return;
   }
 
@@ -47,6 +52,7 @@ function* updateAmount({ id, amount }) {
 
   if (amount > stockAmount) {
     toast.error('Product amount out of stock');
+    yield put(addToCartError());
     return;
   }
 

@@ -95,3 +95,13 @@ export const Total = styled.div`
     margin-left: 5px;
   }
 `;
+
+export const Empty = styled.div`
+  flex: 1;
+  text-align: center;
+  padding: 20px 0;
+
+  button {
+    margin-top: 20px;
+  }
+`;

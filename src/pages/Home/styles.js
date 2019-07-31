@@ -1,6 +1,18 @@
 import styled from 'styled-components';
 import { darken } from 'polished';
 
+export const Container = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  position: relative;
+
+  .loading {
+    margin-top: 20px;
+  }
+`;
+
 export const ProductList = styled.ul`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -33,33 +45,27 @@ export const ProductList = styled.ul`
     }
 
     button {
-      background: #7159c1;
-      color: #fff;
-      border: 0;
-      border-radius: 4px;
-      overflow: hidden;
+      padding: 0;
       margin-top: auto;
 
       display: flex;
       align-items: center;
-      transition: background 0.2s;
 
-      &:hover {
-        background: ${darken(0.03, '#7159c1')};
-      }
-
-      div {
+      > div {
         display: flex;
         align-items: center;
         padding: 12px;
         background: rgba(0, 0, 0, 0.1);
+
+        height: 40px;
+        width: 53px;
 
         svg {
           margin-right: 5px;
         }
       }
 
-      span {
+      > span {
         flex: 1;
         text-align: center;
         font-weight: bold;

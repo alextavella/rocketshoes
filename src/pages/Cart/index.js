@@ -11,7 +11,10 @@ import {
 import * as CartActions from '../../store/modules/cart/actions';
 import { formatPrice } from '../../utils/format';
 
-import { Container, ProductTable, Total } from './styles';
+import Button from '../../components/Button';
+import history from '../../services/history';
+
+import { Container, ProductTable, Total, Empty } from './styles';
 
 function Cart({ cart, total, removeFromCart, updateAmountRequest }) {
   const handleDeleteProduct = productId => {
@@ -26,8 +29,14 @@ function Cart({ cart, total, removeFromCart, updateAmountRequest }) {
     updateAmountRequest(product.id, product.amount + 1);
   };
 
-  return (
-    <Container>
+  const cartIsEmpty = () => !cart.length;
+
+  const handleContinue = () => {
+    history.push('/');
+  };
+
+  const renderComponent = () => (
+    <React.Fragment>
       <ProductTable>
         <thead>
           <tr>
@@ -89,6 +98,19 @@ function Cart({ cart, total, removeFromCart, updateAmountRequest }) {
           <strong>{total}</strong>
         </Total>
       </footer>
+    </React.Fragment>
+  );
+
+  const renderEmptyState = () => (
+    <Empty>
+      <p>Carrinho Vazio</p>
+      <Button onClick={() => handleContinue()}>Continuar Comprando</Button>
+    </Empty>
+  );
+
+  return (
+    <Container>
+      {cartIsEmpty() ? renderEmptyState() : renderComponent()}
     </Container>
   );
 }
@@ -98,25 +120,25 @@ Cart.propTypes = {
     PropTypes.shape({
       title: PropTypes.string,
       image: PropTypes.string,
-      price: PropTypes.string,
+      price: PropTypes.number,
       priceFormatted: PropTypes.string,
       amount: PropTypes.number,
     })
   ),
-  total: PropTypes.number.isRequired,
+  total: PropTypes.string.isRequired,
   removeFromCart: PropTypes.func.isRequired,
   updateAmountRequest: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-  cart: state.cart.map(product => ({
+  cart: state.cart.items.map(product => ({
     ...product,
     priceFormatted: formatPrice(product.price),
     subtotal: formatPrice(product.price * product.amount),
   })),
 
   total: formatPrice(
-    state.cart.reduce((total, product) => {
+    state.cart.items.reduce((total, product) => {
       return total + product.price * product.amount;
     }, 0)
   ),

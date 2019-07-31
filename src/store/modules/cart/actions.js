@@ -34,3 +34,9 @@ export function updateAmountSuccess(id, amount) {
     amount,
   };
 }
+
+export function addToCartError() {
+  return {
+    type: '@cart/ADD_ERROR',
+  };
+}
