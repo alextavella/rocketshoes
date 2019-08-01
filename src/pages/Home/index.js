@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { connect, useSelector } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
 import { MdAddShoppingCart } from 'react-icons/md';
 
 import api from '../../services/api';
@@ -13,7 +11,17 @@ import Loading from '../../components/Loading';
 
 import { Container, ProductList } from './styles';
 
-function Home({ addToCartRequest, amount }) {
+export default function Home() {
+  const amount = useSelector(state =>
+    state.cart.items.reduce((amounts, product) => {
+      amounts[product.id] = product.amount;
+
+      return amounts;
+    }, {})
+  );
+
+  const dispatch = useDispatch();
+
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState([]);
   const [addProduct, setAddProduct] = useState(null);
@@ -21,7 +29,7 @@ function Home({ addToCartRequest, amount }) {
   const loadingCart = useSelector(state => state.cart.loading);
 
   useEffect(() => {
-    const loadProducts = async () => {
+    async function loadProducts() {
       setLoading(true);
 
       const response = await api.get('/products');
@@ -33,12 +41,10 @@ function Home({ addToCartRequest, amount }) {
 
       setProducts(data);
       setLoading(false);
-    };
+    }
 
     loadProducts();
   }, []);
-
-  const isLoading = () => loading;
 
   useEffect(() => {
     if (!loadingCart && addProduct) {
@@ -48,14 +54,21 @@ function Home({ addToCartRequest, amount }) {
     }
   }, [addProduct, loadingCart, products]);
 
-  const handleAddProduct = product => {
+  function handleAddProduct(product) {
     const index = products.findIndex(item => item.id === product.id);
     products[index] = { ...products[index], loading: true };
     setProducts([...products]);
     setAddProduct(product);
 
-    addToCartRequest(product.id);
-  };
+    dispatch(CartActions.addToCartRequest(product.id));
+  }
+
+  const ButtonIconToCart = ({ amountProduct = 0 }) => (
+    <React.Fragment>
+      <MdAddShoppingCart size={16} color="#FFF" />
+      {amountProduct}
+    </React.Fragment>
+  );
 
   const renderComponent = () => (
     <ProductList>
@@ -73,10 +86,7 @@ function Home({ addToCartRequest, amount }) {
               {product.loading ? (
                 <Loading size={15} color="#fff" />
               ) : (
-                <React.Fragment>
-                  <MdAddShoppingCart size={16} color="#FFF" />
-                  {amount[product.id] || 0}
-                </React.Fragment>
+                <ButtonIconToCart amountProduct={amount[product.id]} />
               )}
             </div>
             <span>Adicionar ao carrinho</span>
@@ -92,24 +102,5 @@ function Home({ addToCartRequest, amount }) {
     </Container>
   );
 
-  return isLoading() ? renderLoading() : renderComponent();
+  return loading ? renderLoading() : renderComponent();
 }
-
-Home.propTypes = {
-  addToCartRequest: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = state => ({
-  amount: state.cart.items.reduce((amount, product) => {
-    amount[product.id] = product.amount;
-    return amount;
-  }, {}),
-});
-
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(CartActions, dispatch);
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Home);

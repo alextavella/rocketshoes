@@ -1,6 +1,6 @@
 {
   "extends": ["react-app", "airbnb", "prettier", "prettier/react"],
-  "plugins": ["react", "prettier"],
+  "plugins": ["react", "prettier", "react-hooks"],
   "rules": {
     "prettier/prettier": "error",
     "react/jsx-filename-extension": ["warn", { "extensions": [".jsx", ".js"] }],
@@ -10,6 +10,8 @@
     "react/require-default-props": "off",
     "react/forbid-foreign-prop-types": "off",
     "no-console": ["error", { "allow": ["tron"] }],
-    "no-param-reassign": "off"
+    "no-param-reassign": "off",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
   }
 }

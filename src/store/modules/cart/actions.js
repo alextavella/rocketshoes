@@ -40,3 +40,9 @@ export function addToCartError() {
     type: '@cart/ADD_ERROR',
   };
 }
+
+export function addToCartDefault() {
+  return {
+    type: '@cart/DEFAULT',
+  };
+}

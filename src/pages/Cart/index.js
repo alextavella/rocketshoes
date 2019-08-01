@@ -1,7 +1,5 @@
-import React from 'react';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import React, { useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   MdRemoveCircleOutline,
   MdAddCircleOutline,
@@ -16,24 +14,42 @@ import history from '../../services/history';
 
 import { Container, ProductTable, Total, Empty } from './styles';
 
-function Cart({ cart, total, removeFromCart, updateAmountRequest }) {
-  const handleDeleteProduct = productId => {
-    removeFromCart(productId);
-  };
+export default function Cart() {
+  const cart = useSelector(state =>
+    state.cart.items.map(product => ({
+      ...product,
+      priceFormatted: formatPrice(product.price),
+      subtotal: formatPrice(product.price * product.amount),
+    }))
+  );
 
-  const decrementProduct = product => {
-    updateAmountRequest(product.id, product.amount - 1);
-  };
+  const total = useSelector(state =>
+    formatPrice(
+      state.cart.items.reduce((totals, product) => {
+        return totals + product.price * product.amount;
+      }, 0)
+    )
+  );
 
-  const incrementProduct = product => {
-    updateAmountRequest(product.id, product.amount + 1);
-  };
+  const cartIsEmpty = useMemo(() => !cart.length, [cart.length]);
 
-  const cartIsEmpty = () => !cart.length;
+  const dispatch = useDispatch();
 
-  const handleContinue = () => {
+  function handleDeleteProduct(productId) {
+    dispatch(CartActions.removeFromCart(productId));
+  }
+
+  function decrementProduct(product) {
+    dispatch(CartActions.updateAmountRequest(product.id, product.amount - 1));
+  }
+
+  function incrementProduct(product) {
+    dispatch(CartActions.updateAmountRequest(product.id, product.amount + 1));
+  }
+
+  function handleContinue() {
     history.push('/');
-  };
+  }
 
   const renderComponent = () => (
     <React.Fragment>
@@ -112,44 +128,7 @@ function Cart({ cart, total, removeFromCart, updateAmountRequest }) {
 
   return (
     <Container>
-      {cartIsEmpty() ? renderEmptyState() : renderComponent()}
+      {cartIsEmpty ? renderEmptyState() : renderComponent()}
     </Container>
   );
 }
-
-Cart.propTypes = {
-  cart: PropTypes.arrayOf(
-    PropTypes.shape({
-      title: PropTypes.string,
-      image: PropTypes.string,
-      price: PropTypes.number,
-      priceFormatted: PropTypes.string,
-      amount: PropTypes.number,
-    })
-  ),
-  total: PropTypes.string.isRequired,
-  removeFromCart: PropTypes.func.isRequired,
-  updateAmountRequest: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = state => ({
-  cart: state.cart.items.map(product => ({
-    ...product,
-    priceFormatted: formatPrice(product.price),
-    subtotal: formatPrice(product.price * product.amount),
-  })),
-
-  total: formatPrice(
-    state.cart.items.reduce((total, product) => {
-      return total + product.price * product.amount;
-    }, 0)
-  ),
-});
-
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(CartActions, dispatch);
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Cart);

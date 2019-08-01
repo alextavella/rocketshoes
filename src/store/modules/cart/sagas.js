@@ -6,6 +6,7 @@ import history from '../../../services/history';
 import { formatPrice } from '../../../utils/format';
 
 import {
+  addToCartDefault,
   addToCartError,
   addToCartSuccess,
   updateAmountSuccess,
@@ -45,7 +46,10 @@ function* addToCart({ id }) {
 }
 
 function* updateAmount({ id, amount }) {
-  if (amount <= 0) return;
+  if (amount <= 0) {
+    yield put(addToCartDefault());
+    return;
+  }
 
   const stock = yield call(api.get, `/stock/${id}`);
   const stockAmount = stock.data.amount;

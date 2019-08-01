@@ -36,6 +36,7 @@ export default function cart(state = initialState, action) {
         }
         draft.loading = false;
       });
+    case '@cart/DEFAULT':
     case '@cart/ADD_ERROR':
       return produce(state, draft => {
         draft.loading = false;
