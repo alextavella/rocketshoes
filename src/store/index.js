@@ -15,13 +15,14 @@ const sagaMiddleware = createSagaMiddleware({
   sagaMonitor,
 });
 
-const enhancer =
-  process.env.NODE_ENV === 'development'
-    ? compose(
-        console.tron.createEnhancer(),
-        applyMiddleware(sagaMiddleware)
-      )
-    : null;
+const enhancer = process.env.NODE_ENV === 'development'
+  ? compose(
+    console.tron.createEnhancer(),
+    applyMiddleware(sagaMiddleware)
+  )
+  : compose(
+    applyMiddleware(sagaMiddleware)
+  );
 
 const persistConfig = {
   key: 'rocketshoes',
