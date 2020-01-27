@@ -12,7 +12,7 @@ import {
   updateAmountSuccess,
 } from './actions';
 
-function* addToCart({ id }) {
+export function* addToCart({ id }) {
   const productExists = yield select(state =>
     state.cart.items.find(item => item.id === id)
   );
@@ -45,7 +45,7 @@ function* addToCart({ id }) {
   }
 }
 
-function* updateAmount({ id, amount }) {
+export function* updateAmount({ id, amount }) {
   if (amount <= 0) {
     yield put(addToCartDefault());
     return;
