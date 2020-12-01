@@ -4,12 +4,12 @@ Rocketshoes
 
 Builds server
 
-### `npx json-server server.json -p 3333`
+### `yarn server`
 
 With Delay 2 Seconds
 
-### `npx json-server server.json -p 3333 -d 2000`
+### `yarn server -- -d 2000`
 
 Run application
 
-### `npm start`
+### `yarn start`
